@@ -32,7 +32,7 @@ RAZOR_KEY_SECRET ="Mg9Sj81MdUuTXlvbWaz5o0U1"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ * ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
