@@ -810,6 +810,10 @@ def paymenthandler(request):
 
 
 import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 from nltk import download
 from nltk import pos_tag, sent_tokenize, word_tokenize
@@ -907,7 +911,6 @@ def job(request):
 
 
 import pandas as pd
-# views.py
 import requests
 from django.shortcuts import render
 from django.http import HttpResponse
