@@ -728,6 +728,41 @@ def student_feedback(request):
     else:
         messages.error(request, 'You need to be logged in to access this page.')
         return redirect('login')
+    
+def paymenthandler(request):
+    if request.method == "POST":
+        student_id = request.session.get('student_id_after_login')
+        if student_id is None:
+            return HttpResponseBadRequest('Student ID not found in session')
+
+        print(student_id, "Student ID")
+        try:
+            user = StudentRegModel.objects.get(pk=student_id)
+        except StudentRegModel.DoesNotExist:
+            return HttpResponseBadRequest('Student not found')
+
+        cart = get_object_or_404(CartModel, cart_user=user)
+        fee = cart.cart_booking.price
+        amount = fee * 100 
+        try:
+            cart = get_object_or_404(CartModel, cart_user=user)
+            StudentCourses.objects.create(
+                student=user,
+                course=cart.cart_booking,
+                amount=fee,
+                payment_status="Successful",
+                payment_id=1,
+                order_id=1
+            )
+            messages.success(request, 'Payment successfully completed')
+            return redirect('my_courses')
+        except Exception as e:
+            messages.error(request, 'Payment Failed: ' + str(e))
+            return redirect('student_courses')
+
+
+
+
 
 
 
