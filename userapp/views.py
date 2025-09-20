@@ -4,18 +4,17 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth import logout
 import os
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from django.shortcuts import render,redirect
+# import pandas as pd
+# from sklearn.feature_extraction.text import TfidfVectorizer
 from django.core.files.storage import FileSystemStorage
 from PyPDF2 import PdfReader
-from sklearn.feature_extraction.text import TfidfVectorizer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-import string
-import re
-import pandas as pd
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from nltk.tokenize import word_tokenize
+# from nltk.corpus import stopwords
+# from nltk.stem import WordNetLemmatizer
+# import string
+# import re
+# import pandas as pd
 from django.contrib import messages
 import urllib.request
 import urllib.parse
@@ -136,10 +135,6 @@ def apply_job(request):
 
     return redirect("job_list")
 
-
-
-
-
 def student_logout(request):
     logout(request)
     messages.info(request,"Logout Successfully ")
@@ -150,11 +145,8 @@ def student_logout(request):
 def index(requrest):
     return render(requrest,"user/index.html")
 
-
-
 def about(request):
     return render(request,"user/about.html")
-
 
 def student_login(request):
     if request.method == 'POST':
@@ -186,7 +178,6 @@ def student_login(request):
             messages.error(request, 'No User Found')
             return redirect('student_register')
     return render(request,"user/student-login.html")
-
 
 def instructor_login(request):
     if request.method == 'POST':
@@ -223,9 +214,6 @@ def instructor_login(request):
             return redirect('instructor_register')
     return render(request, "user/instructor-login.html")
 
-
-
-
 def student_register(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -253,7 +241,6 @@ def student_register(request):
             messages.info(request, 'OTP Sent To Email and Phone!')
             return redirect('otp')
     return render(request, "user/student-register.html")
-
 
 def instructor_register(request):
     if request.method == "POST":
@@ -283,8 +270,6 @@ def instructor_register(request):
             return redirect('instructorotp')
     return render(request,"user/instructor-register.html")
 
-
-
 def admin_login(request):
     if request.method == 'POST':
         username = request.POST.get('name')
@@ -296,13 +281,8 @@ def admin_login(request):
             messages.error(request, 'Invalid username or password. Please try again.')
     return render(request,"user/admin-login.html")
 
-
-
 def contact(request):
     return render(request,"user/contact.html")
-
-
-
 
 def ins_otp(request):
     ins_id = request.session.get('ins_id')
@@ -329,9 +309,6 @@ def ins_otp(request):
             print("Invalid Instructor")
             return redirect('instructor_register')
     return render(request,"user/ins-otp.html")
-
-
-
 
 def otp(request):
     student_id = request.session.get('student_id')
@@ -361,8 +338,6 @@ def otp(request):
             print("Invalid Student")
             return redirect('student_register')
     return render(request,"user/otp.html")
-
-
 
 # student views after login
 
@@ -410,19 +385,16 @@ def apply_job(request, job_id):
         return redirect('student_dashboard')
     return redirect('student_dashboard')
 
-
 def student_courses(request):
     all_courses = Addcourse.objects.all()
     for course_name in all_courses:
         print(course_name.course_name)
     return render(request, "user/student-courses.html", {'all_courses': all_courses})
 
-
 def purchase_course(request, course_id):
     course = Addcourse.objects.get(pk=course_id)
     request.session['course_id_in_purchase_page'] = course.course_id
     return render(request, 'user/purchasepage.html', {'course': course})
-
 
 def test_result(request):
     student_id = request.session.get('student_id_after_login')
@@ -435,9 +407,6 @@ def test_result(request):
     else:
         messages.error(request, "Student not logged in or session data missing")
         return redirect("student_login")
-
-
-
 
 from django.db.models import Count, Exists, OuterRef
 from reportlab.lib.pagesizes import letter
@@ -466,7 +435,6 @@ def my_courses(request):
         'student_courses': student_courses_with_question_count
     }
     return render(request, "user/my-courses.html", context)
-
 
 import os
 from django.conf import settings
@@ -570,10 +538,6 @@ def download_certificate(request, course_id):
         messages.error(request, "You are not enrolled in this course.")
         return redirect('my_courses')
 
-
-
-
-
 def test(request, course_id):
     course = Addcourse.objects.get(pk=course_id)
     questions = list(Question.objects.filter(course=course).order_by('?')[:10])
@@ -582,7 +546,6 @@ def test(request, course_id):
         questions += additional_questions
     random.shuffle(questions)
     return render(request, "user/test.html", {'questions': questions, 'course_id': course_id})
-
 
 def submit_test(request, course_id):
     if request.method == 'POST':
@@ -639,7 +602,6 @@ def submit_test(request, course_id):
     else:
         messages.error(request, "Invalid request method.")
         return redirect('test')
-    
 
 def student_profile(request):
     student_id  = request.session['student_id_after_login']
@@ -666,9 +628,6 @@ def student_profile(request):
         return redirect('student_profile')
     return render(request,"user/student-profile.html",{'student':student})
 
-
-
-
 def view_details(request, test_id):
     test_results = ResultModel.objects.filter(test_id=test_id)
     total_marks = UserTestModel.objects.get(pk=test_id)
@@ -691,11 +650,6 @@ def view_details(request, test_id):
                    "correct_Answers":correct_Answers,
                    "wrong_Answers":wrong_Answers,
                    "percantage":percantage,})
-
-
-
-
-
 
 def student_feedback(request):
     if request.method == 'POST':
@@ -728,7 +682,7 @@ def student_feedback(request):
     else:
         messages.error(request, 'You need to be logged in to access this page.')
         return redirect('login')
-    
+
 def paymenthandler(request):
     if request.method == "POST":
         student_id = request.session.get('student_id_after_login')
@@ -760,20 +714,7 @@ def paymenthandler(request):
             messages.error(request, 'Payment Failed: ' + str(e))
             return redirect('student_courses')
 
-
-
-
-
-
-
-
-
-
-
-
 from django.db import IntegrityError
-
-
 
 def user_payment(request, id):
     if request.method == "POST":
@@ -801,119 +742,106 @@ def user_payment(request, id):
     else:
         return HttpResponseBadRequest("Invalid request method.")
 
+# import nltk
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('stopwords')
+# nltk.download('wordnet')
 
-
-
-
-
-
-
-
-
-
-
-import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-from nltk import download
-from nltk import pos_tag, sent_tokenize, word_tokenize
-from nltk.corpus import stopwords
-import string
-import re
-from nltk.stem import WordNetLemmatizer
+# from nltk import download
+# from nltk import pos_tag, sent_tokenize, word_tokenize
+# from nltk.corpus import stopwords
+# import string
+# import re
+# from nltk.stem import WordNetLemmatizer
         
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
+# import numpy as np
+# from sklearn.metrics.pairwise import cosine_similarity
 
-wnl = WordNetLemmatizer()
-df_jd=pd.read_csv('dataset/training.csv')
-df_jd.dropna(subset=['job_description'], inplace=True)
-df_jd['job_description'] = df_jd['job_description'].astype(str)
+# wnl = WordNetLemmatizer()
+# import os
+# from django.conf import settings
+# import pandas as pd
 
-vectorizer1 = TfidfVectorizer(ngram_range=(1, 2))
-job_Description = vectorizer1.fit_transform(df_jd['job_description'])
+# file_path = os.path.join(settings.BASE_DIR, 'dataset', 'training.csv')
+# df_jd = pd.read_csv(file_path)
+# df_jd.dropna(subset=['job_description'], inplace=True)
+# df_jd['job_description'] = df_jd['job_description'].astype(str)
 
+# vectorizer1 = TfidfVectorizer(ngram_range=(1, 2))
+# job_Description = vectorizer1.fit_transform(df_jd['job_description'])
 
+# def preprocess_text(text, wnl):
+#     text = text.lower()
+#     text = re.sub('[^a-zA-Z]', ' ', text)
+#     sentences = sent_tokenize(text)
+#     features = []
+#     stop_words = set(stopwords.words("english"))
+#     for sent in sentences:
+#         if any(criteria in sent for criteria in ['skills', 'education']):
+#             words = word_tokenize(sent)
+#             words = [word for word in words if word not in stop_words]
+#             tagged_words = pos_tag(words)
+#             filtered_words = [word for word, tag in tagged_words if tag not in ['DT', 'IN', 'TO', 'PRP', 'WP']]
+#             features.append(" ".join(filtered_words))
+#     return " ".join(features)  
 
+# import fitz 
+# def calculate_resume_score(resume_path):
+#     try:
+#         with fitz.open(resume_path) as doc:
+#             resume_text = ""
+#             for page_number in range(doc.page_count):
+#                 page = doc.load_page(page_number)
+#                 resume_text += page.get_text()
+#         resume_score = len(resume_text.split())
+#         max_score = 1000
+#         scaled_score = (resume_score / max_score) * 100
+#         return scaled_score
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return None
 
-def preprocess_text(text, wnl):
-    text = text.lower()
-    text = re.sub('[^a-zA-Z]', ' ', text)
-    sentences = sent_tokenize(text)
-    features = []
-    stop_words = set(stopwords.words("english"))
-    for sent in sentences:
-        if any(criteria in sent for criteria in ['skills', 'education']):
-            words = word_tokenize(sent)
-            words = [word for word in words if word not in stop_words]
-            tagged_words = pos_tag(words)
-            filtered_words = [word for word, tag in tagged_words if tag not in ['DT', 'IN', 'TO', 'PRP', 'WP']]
-            features.append(" ".join(filtered_words))
-    return " ".join(features)  
-
-import fitz 
-def calculate_resume_score(resume_path):
-    try:
-        with fitz.open(resume_path) as doc:
-            resume_text = ""
-            for page_number in range(doc.page_count):
-                page = doc.load_page(page_number)
-                resume_text += page.get_text()
-        resume_score = len(resume_text.split())
-        max_score = 1000
-        scaled_score = (resume_score / max_score) * 100
-        return scaled_score
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-
-
-
-def extract_text_from_pdf(file_path):
-    reader = PdfReader(file_path)
-    text = "".join(page.extract_text() for page in reader.pages)
-    return text
-
+# def extract_text_from_pdf(file_path):
+#     reader = PdfReader(file_path)
+#     text = "".join(page.extract_text() for page in reader.pages)
+#     return text
 
 def job(request):
-    top_job_descriptions = ""
-    resume_score = ''
-    matched_percentage = 0 
-    if request.method == 'POST' and request.FILES.get('pdf-fileup'):
-        uploaded_file = request.FILES['pdf-fileup']
-        fs = FileSystemStorage()
-        filename = fs.save(uploaded_file.name, uploaded_file)
-        temp_file_path = fs.path(filename)  
-        print(temp_file_path, "path is here")
-        resume_score = calculate_resume_score(temp_file_path)
-        # Example scenario where resume_score might be None
-        resume_score = None
+#     top_job_descriptions = ""
+#     resume_score = ''
+#     matched_percentage = 0 
+#     if request.method == 'POST' and request.FILES.get('pdf-fileup'):
+#         uploaded_file = request.FILES['pdf-fileup']
+#         fs = FileSystemStorage()
+#         filename = fs.save(uploaded_file.name, uploaded_file)
+#         temp_file_path = fs.path(filename)  
+#         print(temp_file_path, "path is here")
+#         resume_score = calculate_resume_score(temp_file_path)
+#         # Example scenario where resume_score might be None
+#         resume_score = None
+# 
+#         # Check if resume_score is not None before rounding
+#         if resume_score is not None:
+#             resume_score = round(resume_score, 1)
+#         else:
+#             print("resume_score is None. Cannot round.")
+#         request.session['resumepath'] = temp_file_path
+#         dummy = extract_text_from_pdf(temp_file_path)
+#         text12 = preprocess_text(dummy, wnl)
+#         text13 = vectorizer1.transform([text12])
+#         RAM = cosine_similarity(text13, job_Description).flatten()
+#         
+#         max_similarity = max(RAM)
+#         matched_percentage = max_similarity * 100
+#         
+#         top_job_descriptions_df = df_jd.iloc[np.argsort(RAM)[-5:][::-1]]
+#         top_job_descriptions = top_job_descriptions_df.to_dict('records')
+#         print(top_job_descriptions,"hallooooooooooooo")
+#        
+     return render(request, "user/job.html")#{'top_job_descriptions': top_job_descriptions, 'resume_score': resume_score, 'matched_percentage': matched_percentage})
 
-        # Check if resume_score is not None before rounding
-        if resume_score is not None:
-            resume_score = round(resume_score, 1)
-        else:
-            print("resume_score is None. Cannot round.")
-        request.session['resumepath'] = temp_file_path
-        dummy = extract_text_from_pdf(temp_file_path)
-        text12 = preprocess_text(dummy, wnl)
-        text13 = vectorizer1.transform([text12])
-        RAM = cosine_similarity(text13, job_Description).flatten()
-        
-        max_similarity = max(RAM)
-        matched_percentage = max_similarity * 100
-        
-        top_job_descriptions_df = df_jd.iloc[np.argsort(RAM)[-5:][::-1]]
-        top_job_descriptions = top_job_descriptions_df.to_dict('records')
-        print(top_job_descriptions,"hallooooooooooooo")
-       
-    return render(request, "user/job.html", {'top_job_descriptions': top_job_descriptions, 'resume_score': resume_score, 'matched_percentage': matched_percentage})
-
-
-import pandas as pd
+#import pandas as pd
 import requests
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -951,4 +879,3 @@ def job_list(request):
 def job_detail(request, job_id):
     job = Job.objects.get(id=job_id)
     return render(request, 'user/job_detail.html', {'job': job})
-
