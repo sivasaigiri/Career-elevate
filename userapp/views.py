@@ -7,7 +7,7 @@ import os
 # import pandas as pd
 # from sklearn.feature_extraction.text import TfidfVectorizer
 from django.core.files.storage import FileSystemStorage
-from PyPDF2 import PdfReader
+#from PyPDF2 import PdfReader
 # from sklearn.feature_extraction.text import TfidfVectorizer
 # from nltk.tokenize import word_tokenize
 # from nltk.corpus import stopwords
