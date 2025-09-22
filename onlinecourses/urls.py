@@ -22,8 +22,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 
-from careerelevate.userapp import views as userviews
-
+from userapp import views as userviews
 from instructorapp import views as insviews
 
 
