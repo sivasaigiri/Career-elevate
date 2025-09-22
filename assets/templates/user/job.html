@@ -175,7 +175,7 @@
                             </div>
         
                             <!-- Form for Uploading Resume -->
-                            <form name="upload" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+                            <form name="upload" method="post" action="{% url 'job' %}" enctype="multipart/form-data" accept-charset="utf-8">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="pdf-fileup" class="btn btn-primary btn-lg mx-auto w-75 mb-3" id="b-btn">
